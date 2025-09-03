@@ -6,3 +6,4 @@ __pycache__/
 
 # Ignore other system files
 *.pyc
+*.toml  # or specifically secrets.toml

@@ -1,4 +1,4 @@
-# 🎯 AI Title Generator (Streamlit App)
+# 🎯 Title Master AI (Streamlit App)
 
 This is a simple and powerful **AI-powered tool** that generates professional, catchy, and creative titles instantly using Google’s **Gemini API**.
 

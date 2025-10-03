@@ -36,7 +36,7 @@ if st.button("Generate Titles"):
             # =========================
             # 4. Call Gemini API
             # =========================
-            model = genai.GenerativeModel("gemini-1.5-flash")
+            model = genai.GenerativeModel("gemini-1.5-flash-latest")
             response = model.generate_content(prompt)
 
             # =========================

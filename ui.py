@@ -12,11 +12,6 @@ except KeyError:
     st.error("🚨 GOOGLE_API_KEY not found! Please add it in Streamlit Cloud → Settings → Secrets.")
     st.stop()
 
-# Debug info (you can remove later)
-st.caption(f"✅ API key loaded. Length: {len(api_key)}")
-st.caption("🧠 Using model: gemini-2.5-flash")
-
-
 # =========================
 # 2. Define structured response model
 # =========================

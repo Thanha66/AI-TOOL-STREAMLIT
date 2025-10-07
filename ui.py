@@ -14,12 +14,12 @@ except KeyError:
 
 # Debug info (you can remove later)
 st.caption(f"✅ API key loaded. Length: {len(api_key)}")
-st.caption("🧠 Using model: gemini-1.5-flash-latest")
+st.caption("🧠 Using model: gemini-pro")
 
 # =========================
 # 2. Define structured response model
 # =========================
-model = genai.GenerativeModel("gemini-1.5-flash-latest")
+model = genai.GenerativeModel("gemini-pro")
 
 # =========================
 # 3. Streamlit App UI

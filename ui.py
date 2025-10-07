@@ -1,66 +1,56 @@
-# ui.py - Streamlit app for generating titles using Google Gemini with copy feature
-
-import streamlit as st  # Streamlit library
-from pydantic import BaseModel
-from typing import List
+import streamlit as st
 import google.generativeai as genai
+import pandas as pd
 
 # =========================
 # 1. Configure Gemini API
 # =========================
-genai.configure(api_key=st.secrets["GOOGLE_API_KEY"])
+try:
+    api_key = st.secrets["GOOGLE_API_KEY"]
+    genai.configure(api_key=api_key)
+except KeyError:
+    st.error("🚨 GOOGLE_API_KEY not found! Please add it in Streamlit Cloud → Settings → Secrets.")
+    st.stop()
+
+# Debug info (you can remove later)
+st.caption(f"✅ API key loaded. Length: {len(api_key)}")
+st.caption("🧠 Using model: gemini-1.5-flash")
 
 # =========================
 # 2. Define structured response model
 # =========================
-class Titles(BaseModel):
-    titles: List[str]
+model = genai.GenerativeModel("gemini-1.5-flash")
 
 # =========================
-# 3. Streamlit UI Elements
+# 3. Streamlit App UI
 # =========================
-st.title("💡 Blog/Video Title Generator")
-st.write("Enter a topic, and get 5 catchy, SEO-friendly titles!")
+st.title("🤖 Master AI")
+st.write("Welcome! This AI tool generates creative titles for your ideas using Google's Gemini AI.")
 
-# Text input for topic
-topic = st.text_input("Topic", value="Digital marketing")
+# Input area
+user_input = st.text_area("Enter your project description:", placeholder="E.g. An app that tracks your daily habits using AI...")
 
-# Button to generate titles
-if st.button("Generate Titles"):
-    if not topic.strip():
-        st.warning("Please enter a topic!")
+# Button
+if st.button("✨ Generate Title"):
+    if user_input.strip():
+        with st.spinner("Generating a creative title..."):
+            try:
+                response = model.generate_content(f"Generate a catchy, creative title for this project idea: {user_input}")
+                title = response.text.strip()
+                st.success("✅ Title generated successfully!")
+                st.subheader(f"💡 Suggested Title: {title}")
+            except Exception as e:
+                st.error(f"⚠️ Error generating title: {e}")
     else:
-        prompt = f"Generate 5 catchy and SEO-friendly blog/video titles about {topic}. Return them as a numbered list."
+        st.warning("Please enter a description first!")
 
-        try:
-            # =========================
-            # 4. Call Gemini API
-            # =========================
-            model = genai.GenerativeModel("gemini-1.5-flash-latest")
-            response = model.generate_content(prompt)
+# =========================
+# 4. Footer
+# =========================
+st.markdown("---")
+st.caption("Built with ❤️ using Streamlit and Google Gemini API.")
 
-            # =========================
-            # 5. Parse response
-            # =========================
-            lines = response.text.split("\n")
-            titles_list = [line.lstrip("0123456789. ").strip() for line in lines if line.strip()]
 
-            # Validate with Pydantic
-            result = Titles(titles=titles_list[:5])
+       
 
-            # =========================
-            # 6. Display results
-            # =========================
-            st.success("Here are your titles:")
-            titles_text = ""
-            for i, t in enumerate(result.titles, 1):
-                st.write(f"{i}. {t}")
-                titles_text += f"{i}. {t}\n"
-
-            # =========================
-            # 7. Copy to clipboard
-            # =========================
-            st.text_area("Copy all titles:", value=titles_text, height=150)
-
-        except Exception as e:
-            st.error(f"Something went wrong! Error details:\n{e}")
+         

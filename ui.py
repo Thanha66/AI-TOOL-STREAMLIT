@@ -15,7 +15,6 @@ except KeyError:
 # Debug info (you can remove later)
 st.caption(f"✅ API key loaded. Length: {len(api_key)}")
 st.caption("🧠 Using model: gemini-2.5-flash")
-st.write([m.name for m in genai.list_models()])
 
 
 # =========================
